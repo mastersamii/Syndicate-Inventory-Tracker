@@ -2,179 +2,812 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>House Inventory</title>
+  <title>Syndicate Stash Tracker</title>
+
+  <!-- Awesome fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
   <style>
-    body { font-family: Arial, sans-serif; margin: 20px; }
-    h1 { margin-bottom: 0.5rem; }
-    form { margin-bottom: 1rem; display: flex; flex-wrap: wrap; gap: 0.5rem; align-items: flex-end; }
-    label { display: flex; flex-direction: column; font-size: 0.9rem; }
-    input, select { padding: 0.25rem 0.4rem; }
-    button { padding: 0.4rem 0.8rem; cursor: pointer; }
-    table { border-collapse: collapse; width: 100%; margin-top: 0.5rem; }
-    th, td { border: 1px solid #ccc; padding: 0.4rem 0.5rem; text-align: left; }
-    th { background: #f5f5f5; }
-  </style>
-</head>
-<body>
-  <h1>House Inventory</h1>
-  <p>Add items below. Your list is saved in this browser automatically.</p>
+    :root {
+      --bg: #050509;
+      --bg-elevated: #0c0c14;
+      --accent: #10b981; /* teal/green syndicate vibes */
+      --accent-soft: rgba(16,185,129,0.18);
+      --accent-danger: #ef4444;
+      --text-main: #e5e7eb;
+      --text-muted: #9ca3af;
+      --border-subtle: #1f2937;
+      --input-bg: #111827;
+    }
 
-  <form id="item-form">
-    <label>
-      Item name
-      <input type="text" id="itemName" required />
-    </label>
-    <label>
-      Room / Area
-      <input type="text" id="itemRoom" placeholder="Kitchen, Bedroom, etc." />
-    </label>
-    <label>
-      Quantity
-      <input type="number" id="itemQty" min="1" value="1" />
-    </label>
-    <label style="flex: 1 1 200px;">
-      Notes
-      <input type="text" id="itemNotes" placeholder="Brand, color, serial number..." />
-    </label>
-    <button type="submit">Add / Update</button>
-    <button type="button" id="clearAll" style="margin-left: auto;">Clear all</button>
-  </form>
+    * {
+      box-sizing: border-box;
+    }
 
-  <input
-    type="text"
-    id="search"
-    placeholder="Search by name, room, or notes..."
-    style="width: 100%; padding: 0.4rem; margin-bottom: 0.5rem;"
-  />
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      color: var(--text-main);
+      background: radial-gradient(circle at top, #111827 0, #020617 50%, #000 100%);
+      padding: 24px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
 
-  <table>
-    <thead>
-      <tr>
-        <th>#</th>
-        <th>Item</th>
-        <th>Room</th>
-        <th>Qty</th>
-        <th>Notes</th>
-        <th>Actions</th>
-      </tr>
-    </thead>
-    <tbody id="inventoryBody"></tbody>
-  </table>
+    .app-shell {
+      width: 100%;
+      max-width: 1100px;
+      background: linear-gradient(145deg, rgba(16,24,40,0.95), rgba(2,6,23,0.98));
+      border-radius: 18px;
+      padding: 22px 24px 26px;
+      border: 1px solid rgba(148,163,184,0.3);
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.8),
+        0 24px 60px rgba(0,0,0,0.7);
+      position: relative;
+      overflow: hidden;
+    }
 
-  <script>
-    const STORAGE_KEY = "houseInventory_v1";
-    let inventory = [];
-    let editingIndex = null;
+    .app-shell::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(16,185,129,0.07), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(59,130,246,0.07), transparent 55%);
+      mix-blend-mode: screen;
+      opacity: 0.9;
+      pointer-events: none;
+    }
 
-    function loadInventory() {
-      const saved = localStorage.getItem(STORAGE_KEY);
-      if (saved) {
-        try {
-          inventory = JSON.parse(saved);
-        } catch (e) {
-          console.error("Error loading inventory", e);
-          inventory = [];
-        }
+    .app-header {
+      position: relative;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18px;
+      z-index: 1;
+    }
+
+    .app-title-block {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .app-title {
+      font-family: "Orbitron", system-ui, sans-serif;
+      font-size: 1.6rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .app-title-tag {
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 999px;
+      background: rgba(15,23,42,0.9);
+      border: 1px solid var(--accent-soft);
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+    }
+
+    .app-subtitle {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+    }
+
+    .status-pill {
+      font-size: 0.75rem;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(16,185,129,0.55);
+      background: rgba(15,118,110,0.24);
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .status-pill-dot {
+      width: 7px;
+      height: 7px;
+      border-radius: 999px;
+      background: #22c55e;
+      box-shadow: 0 0 12px #22c55e;
+    }
+
+    .controls-row {
+      position: relative;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 14px;
+      z-index: 1;
+    }
+
+    .search-input {
+      flex: 1 1 220px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 7px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: radial-gradient(circle at 0 0, rgba(15,23,42,0.9), #020617);
+    }
+
+    .search-input input {
+      flex: 1;
+      border: none;
+      background: transparent;
+      outline: none;
+      font-size: 0.85rem;
+      color: var(--text-main);
+    }
+
+    .search-input input::placeholder {
+      color: var(--text-muted);
+    }
+
+    .ghost-text {
+      font-family: "Orbitron", system-ui, sans-serif;
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.22em;
+      color: var(--text-muted);
+      opacity: 0.8;
+    }
+
+    .pill-button {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      padding: 7px 14px;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      background: radial-gradient(circle at 0 0, rgba(15,23,42,0.9), #020617);
+      color: var(--text-main);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      cursor: pointer;
+      transition: all 0.16s ease-out;
+    }
+
+    .pill-button:hover {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(16,185,129,0.35), 0 0 16px rgba(16,185,129,0.18);
+      transform: translateY(-0.5px);
+    }
+
+    .pill-button.danger {
+      border-color: rgba(248,113,113,0.6);
+      color: #fecaca;
+    }
+
+    .pill-button.danger:hover {
+      box-shadow: 0 0 0 1px rgba(248,113,113,0.45), 0 0 16px rgba(248,113,113,0.18);
+    }
+
+    .layout {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1.5fr) minmax(0, 2fr);
+      gap: 14px;
+      z-index: 1;
+    }
+
+    @media (max-width: 900px) {
+      .layout {
+        grid-template-columns: 1fr;
       }
     }
 
-    function saveInventory() {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(inventory));
+    .card {
+      background: radial-gradient(circle at top, rgba(15,23,42,0.9), #020617);
+      border-radius: 14px;
+      border: 1px solid rgba(51,65,85,0.85);
+      padding: 12px 12px 14px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: -40%;
+      background: radial-gradient(circle at 0 0, rgba(16,185,129,0.09), transparent 55%);
+      opacity: 0.35;
+      pointer-events: none;
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 6px;
+      position: relative;
+      z-index: 1;
+    }
+
+    .card-title {
+      font-size: 0.9rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .card-title-accent {
+      width: 6px;
+      height: 16px;
+      border-radius: 999px;
+      background: linear-gradient(to bottom, var(--accent), transparent);
+    }
+
+    .card-subtitle {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    form {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 8px;
+      z-index: 1;
+    }
+
+    form label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.16em;
+      color: var(--text-muted);
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    form input[type="text"],
+    form input[type="number"] {
+      padding: 5px 8px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: var(--input-bg);
+      color: var(--text-main);
+      font-size: 0.85rem;
+      outline: none;
+      transition: all 0.16s ease-out;
+    }
+
+    form input::placeholder {
+      color: var(--text-muted);
+    }
+
+    form input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 1px rgba(16,185,129,0.35);
+    }
+
+    .form-row-span {
+      grid-column: span 2;
+    }
+
+    .form-actions {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+      grid-column: span 2;
+    }
+
+    .btn-primary {
+      border-radius: 999px;
+      border: none;
+      padding: 7px 16px;
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      background: linear-gradient(to right, #22c55e, #0ea5e9);
+      color: #020617;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      box-shadow: 0 0 18px rgba(34,197,94,0.45);
+      transition: all 0.16s ease-out;
+    }
+
+    .btn-primary:hover {
+      filter: brightness(1.08);
+      transform: translateY(-0.5px);
+      box-shadow: 0 0 22px rgba(34,197,94,0.6);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border-radius: 999px;
+      border: 1px solid var(--border-subtle);
+      padding: 6px 12px;
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--text-muted);
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.16s ease-out;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+    }
+
+    .table-wrap {
+      position: relative;
+      max-height: 420px;
+      overflow: auto;
+      border-radius: 10px;
+      border: 1px solid var(--border-subtle);
+      background: rgba(15,23,42,0.9);
+      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.9);
+      z-index: 1;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.8rem;
+    }
+
+    thead {
+      position: sticky;
+      top: 0;
+      background: linear-gradient(to bottom, #020617, #020617);
+      z-index: 2;
+    }
+
+    th,
+    td {
+      padding: 6px 8px;
+      text-align: left;
+      border-bottom: 1px solid rgba(31,41,55,0.8);
+      white-space: nowrap;
+    }
+
+    th {
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      font-size: 0.7rem;
+      color: var(--text-muted);
+    }
+
+    tbody tr:nth-child(even) {
+      background: rgba(15,23,42,0.6);
+    }
+
+    tbody tr:hover {
+      background: rgba(16,185,129,0.08);
+    }
+
+    tbody td.notes {
+      white-space: normal;
+      max-width: 260px;
+    }
+
+    .tag {
+      font-size: 0.72rem;
+      padding: 2px 7px;
+      border-radius: 999px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: rgba(15,23,42,0.9);
+      color: var(--text-muted);
+    }
+
+    .actions-cell {
+      display: flex;
+      gap: 6px;
+    }
+
+    .action-chip {
+      font-size: 0.7rem;
+      padding: 3px 8px;
+      border-radius: 999px;
+      border: 1px solid rgba(55,65,81,0.9);
+      background: rgba(17,24,39,0.98);
+      color: var(--text-muted);
+      cursor: pointer;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      transition: all 0.14s ease-out;
+    }
+
+    .action-chip:hover {
+      border-color: var(--accent);
+      color: var(--text-main);
+    }
+
+    .action-chip.danger {
+      border-color: rgba(248,113,113,0.7);
+      color: #fecaca;
+    }
+
+    .meta-bar {
+      font-size: 0.72rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 6px;
+      color: var(--text-muted);
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div class="app-header">
+      <div class="app-title-block">
+        <div class="app-title">
+          <span>Syndicate</span>
+          <span class="app-title-tag">Stash Control</span>
+        </div>
+        <div class="app-subtitle">
+          Track every strap, brick, bill, and relic in the house. Shared stash — no excuses, no “I forgot”.
+        </div>
+      </div>
+      <div class="status-pill">
+        <span class="status-pill-dot"></span>
+        <span id="sync-status">Offline / Local Only</span>
+      </div>
+    </div>
+
+    <div class="controls-row">
+      <div class="search-input">
+        <span class="ghost-text">Search</span>
+        <input id="search" type="text" placeholder="Item, room, notes..." />
+      </div>
+
+      <button class="pill-button" id="btn-sync">
+        ⟳ Sync Sheet
+      </button>
+
+      <button class="pill-button danger" id="btn-clear-all">
+        ✕ Wipe Local Cache
+      </button>
+    </div>
+
+    <div class="layout">
+      <!-- Left: Form -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              <span class="card-title-accent"></span>
+              <span>Log Item</span>
+            </div>
+            <div class="card-subtitle">
+              Add or edit stash entries. Changes push to the shared Google Sheet.
+            </div>
+          </div>
+        </div>
+
+        <form id="item-form">
+          <input type="hidden" id="itemId" />
+
+          <label>
+            Item Name
+            <input type="text" id="itemName" placeholder="Glock 19, Coke Brick, SMG, Cash Roll..." required />
+          </label>
+
+          <label>
+            Room / Area
+            <input type="text" id="itemRoom" placeholder="Vault, Master Closet, Garage, Basement..." />
+          </label>
+
+          <label>
+            Quantity
+            <input type="number" id="itemQty" min="1" value="1" />
+          </label>
+
+          <label>
+            Tag / Category
+            <input type="text" id="itemTag" placeholder="Weapon, Drugs, Cash, Misc..." />
+          </label>
+
+          <label class="form-row-span">
+            Notes
+            <input type="text" id="itemNotes" placeholder="Brand, serial, color, extra info..." />
+          </label>
+
+          <div class="form-actions">
+            <button type="submit" class="btn-primary">
+              <span id="submitLabel">Add Item</span>
+            </button>
+            <button type="button" class="btn-secondary" id="btn-reset">
+              Reset Form
+            </button>
+          </div>
+        </form>
+      </div>
+
+      <!-- Right: Table -->
+      <div class="card">
+        <div class="card-header">
+          <div>
+            <div class="card-title">
+              <span class="card-title-accent"></span>
+              <span>Stash Manifest</span>
+            </div>
+            <div class="card-subtitle">
+              Live list of everything logged. Edits update the sheet for the whole gang.
+            </div>
+          </div>
+        </div>
+
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Item</th>
+                <th>Room</th>
+                <th>Qty</th>
+                <th>Tag</th>
+                <th>Notes</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="inventoryBody"></tbody>
+          </table>
+        </div>
+
+        <div class="meta-bar">
+          <span id="countDisplay">0 items logged</span>
+          <span id="lastSyncDisplay">Last sync: never</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    /*******************************************
+     * CONFIG — SET THIS TO YOUR APPS SCRIPT URL
+     *******************************************/
+    const API_URL = "PASTE_YOUR_WEB_APP_URL_HERE"; // e.g. "https://script.google.com/macros/s/XXXXX/exec"
+    const LOCAL_STORAGE_KEY = "syndicateInventory_v1";
+
+    let inventory = [];
+    let editingId = null;
+    let lastSync = null;
+
+    /* ---------- UTILITIES ---------- */
+
+    function updateStatus(text, mode = "neutral") {
+      const el = document.getElementById("sync-status");
+      el.textContent = text;
+      if (mode === "ok") {
+        el.parentElement.style.borderColor = "rgba(16,185,129,0.55)";
+      } else if (mode === "error") {
+        el.parentElement.style.borderColor = "rgba(248,113,113,0.7)";
+      } else {
+        el.parentElement.style.borderColor = "rgba(148,163,184,0.4)";
+      }
+    }
+
+    function saveLocal() {
+      localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify({ inventory, lastSync }));
+    }
+
+    function loadLocal() {
+      const raw = localStorage.getItem(LOCAL_STORAGE_KEY);
+      if (!raw) return;
+      try {
+        const data = JSON.parse(raw);
+        inventory = data.inventory || [];
+        lastSync = data.lastSync || null;
+      } catch (err) {
+        console.error("Failed to parse local data", err);
+      }
     }
 
     function renderInventory(filterText = "") {
       const tbody = document.getElementById("inventoryBody");
       tbody.innerHTML = "";
-      const search = filterText.toLowerCase();
+
+      const search = filterText.trim().toLowerCase();
+      let visible = 0;
 
       inventory
-        .map((item, index) => ({ ...item, index }))
+        .map((item, index) => ({ ...item, index })) // keep original index
         .filter((row) => {
           if (!search) return true;
           return (
-            row.name.toLowerCase().includes(search) ||
+            (row.name || "").toLowerCase().includes(search) ||
             (row.room || "").toLowerCase().includes(search) ||
-            (row.notes || "").toLowerCase().includes(search)
+            (row.notes || "").toLowerCase().includes(search) ||
+            (row.tag || "").toLowerCase().includes(search)
           );
         })
         .forEach((row, displayIndex) => {
+          visible++;
           const tr = document.createElement("tr");
 
           tr.innerHTML = `
             <td>${displayIndex + 1}</td>
-            <td>${row.name}</td>
+            <td>${row.name || ""}</td>
             <td>${row.room || ""}</td>
-            <td>${row.qty}</td>
-            <td>${row.notes || ""}</td>
+            <td>${row.qty || ""}</td>
+            <td>${row.tag ? `<span class="tag">${row.tag}</span>` : ""}</td>
+            <td class="notes">${row.notes || ""}</td>
             <td>
-              <button data-action="edit" data-index="${row.index}">Edit</button>
-              <button data-action="delete" data-index="${row.index}">Delete</button>
+              <div class="actions-cell">
+                <button class="action-chip" data-action="edit" data-id="${row.id}">Edit</button>
+                <button class="action-chip danger" data-action="delete" data-id="${row.id}">Del</button>
+              </div>
             </td>
           `;
-
           tbody.appendChild(tr);
         });
+
+      document.getElementById("countDisplay").textContent =
+        `${visible} item${visible === 1 ? "" : "s"} visible (total ${inventory.length})`;
+
+      document.getElementById("lastSyncDisplay").textContent =
+        lastSync ? `Last sync: ${new Date(lastSync).toLocaleString()}` : "Last sync: never";
     }
 
     function resetForm() {
+      editingId = null;
+      document.getElementById("itemId").value = "";
       document.getElementById("itemName").value = "";
       document.getElementById("itemRoom").value = "";
       document.getElementById("itemQty").value = 1;
+      document.getElementById("itemTag").value = "";
       document.getElementById("itemNotes").value = "";
-      editingIndex = null;
+      document.getElementById("submitLabel").textContent = "Add Item";
     }
 
-    document.getElementById("item-form").addEventListener("submit", (e) => {
+    function setEditing(item) {
+      editingId = item.id;
+      document.getElementById("itemId").value = item.id;
+      document.getElementById("itemName").value = item.name || "";
+      document.getElementById("itemRoom").value = item.room || "";
+      document.getElementById("itemQty").value = item.qty || 1;
+      document.getElementById("itemTag").value = item.tag || "";
+      document.getElementById("itemNotes").value = item.notes || "";
+      document.getElementById("submitLabel").textContent = "Update Item";
+    }
+
+    /* ---------- API HELPERS (Google Apps Script) ---------- */
+    async function apiRequest(payload) {
+      if (!API_URL || API_URL.includes("PASTE_YOUR_WEB_APP_URL_HERE")) {
+        console.warn("API_URL not configured. Running local-only.");
+        return null;
+      }
+
+      try {
+        const res = await fetch(API_URL, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(payload),
+        });
+
+        if (!res.ok) {
+          throw new Error(`HTTP ${res.status}`);
+        }
+        const data = await res.json();
+        return data;
+      } catch (err) {
+        console.error("API error:", err);
+        updateStatus("Sync error (check console)", "error");
+        return null;
+      }
+    }
+
+    async function syncFromSheet() {
+      const data = await apiRequest({ action: "list" });
+      if (!data || !data.items) return;
+
+      inventory = data.items;
+      lastSync = Date.now();
+      saveLocal();
+      renderInventory(document.getElementById("search").value);
+      updateStatus("Synced with sheet", "ok");
+    }
+
+    async function saveItemToSheet(item) {
+      const data = await apiRequest({ action: "save", item });
+      if (!data || !data.items) return;
+      inventory = data.items;
+      lastSync = Date.now();
+      saveLocal();
+      renderInventory(document.getElementById("search").value);
+      updateStatus("Saved to sheet", "ok");
+    }
+
+    async function deleteItemFromSheet(id) {
+      const data = await apiRequest({ action: "delete", id });
+      if (!data || !data.items) return;
+      inventory = data.items;
+      lastSync = Date.now();
+      saveLocal();
+      renderInventory(document.getElementById("search").value);
+      updateStatus("Deleted from sheet", "ok");
+    }
+
+    /* ---------- EVENT HANDLERS ---------- */
+
+    document.getElementById("item-form").addEventListener("submit", async (e) => {
       e.preventDefault();
+      const idField = document.getElementById("itemId").value || null;
       const name = document.getElementById("itemName").value.trim();
       const room = document.getElementById("itemRoom").value.trim();
-      const qty = parseInt(document.getElementById("itemQty").value) || 1;
+      const qty = parseInt(document.getElementById("itemQty").value, 10) || 1;
+      const tag = document.getElementById("itemTag").value.trim();
       const notes = document.getElementById("itemNotes").value.trim();
 
       if (!name) return;
 
-      const item = { name, room, qty, notes };
+      let item = {
+        id: idField || crypto.randomUUID(),
+        name,
+        room,
+        qty,
+        tag,
+        notes,
+      };
 
-      if (editingIndex !== null) {
-        inventory[editingIndex] = item;
+      // update local array
+      const existingIndex = inventory.findIndex((i) => i.id === item.id);
+      if (existingIndex >= 0) {
+        inventory[existingIndex] = item;
       } else {
         inventory.push(item);
       }
 
-      saveInventory();
+      saveLocal();
       renderInventory(document.getElementById("search").value);
+
+      // push to sheet
+      await saveItemToSheet(item);
+
       resetForm();
     });
 
-    document.getElementById("inventoryBody").addEventListener("click", (e) => {
-      const button = e.target;
-      if (button.tagName !== "BUTTON") return;
+    document.getElementById("inventoryBody").addEventListener("click", async (e) => {
+      const target = e.target;
+      if (!target.classList.contains("action-chip")) return;
 
-      const action = button.getAttribute("data-action");
-      const index = parseInt(button.getAttribute("data-index"), 10);
+      const id = target.getAttribute("data-id");
+      const action = target.getAttribute("data-action");
+      const item = inventory.find((i) => i.id === id);
+      if (!item) return;
 
-      if (action === "delete") {
-        if (confirm("Delete this item?")) {
-          inventory.splice(index, 1);
-          saveInventory();
-          renderInventory(document.getElementById("search").value);
-        }
-      } else if (action === "edit") {
-        const item = inventory[index];
-        document.getElementById("itemName").value = item.name;
-        document.getElementById("itemRoom").value = item.room;
-        document.getElementById("itemQty").value = item.qty;
-        document.getElementById("itemNotes").value = item.notes;
-        editingIndex = index;
-      }
-    });
+      if (action === "edit") {
+        setEditing(item);
+      } else if (action === "delete") {
+        if (!confirm("Delete this stash entry from sheet and local?")) return;
 
-    document.getElementById("clearAll").addEventListener("click", () => {
-      if (confirm("Clear ALL items? This cannot be undone.")) {
-        inventory = [];
-        saveInventory();
-        renderInventory();
-        resetForm();
+        // local remove
+        inventory = inventory.filter((i) => i.id !== id);
+        saveLocal();
+        renderInventory(document.getElementById("search").value);
+
+        // sheet remove
+        await deleteItemFromSheet(id);
       }
     });
 
@@ -182,8 +815,31 @@
       renderInventory(e.target.value);
     });
 
-    loadInventory();
+    document.getElementById("btn-reset").addEventListener("click", () => {
+      resetForm();
+    });
+
+    document.getElementById("btn-clear-all").addEventListener("click", () => {
+      if (!confirm("This only wipes LOCAL cache. Sheet data stays. Continue?")) return;
+      inventory = [];
+      lastSync = null;
+      localStorage.removeItem(LOCAL_STORAGE_KEY);
+      renderInventory(document.getElementById("search").value);
+      updateStatus("Local cache cleared, sheet unchanged", "neutral");
+    });
+
+    document.getElementById("btn-sync").addEventListener("click", () => {
+      syncFromSheet();
+    });
+
+    /* ---------- INIT ---------- */
+    loadLocal();
     renderInventory();
+    if (!API_URL || API_URL.includes("PASTE_YOUR_WEB_APP_URL_HERE")) {
+      updateStatus("Offline / Local Only");
+    } else {
+      updateStatus("Sheet linked (press Sync)", "ok");
+    }
   </script>
 </body>
 </html>
