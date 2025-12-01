@@ -742,7 +742,8 @@
 
     /* ---------- API HELPERS (Google Apps Script) ---------- */
     async function apiRequest(payload) {
-      if (!API_URL || API_URL.includes("https://script.google.com/macros/s/AKfycbyh3u7WGpXluVKM9fcVGX2RI9myEIwNJtmyQItiYf9DzJ42ewlOmq6qNN6kfLWOWxOb/exec")) {
+      // only check if it's empty now
+      if (!API_URL) {
         console.warn("API_URL not configured. Running local-only.");
         return null;
       }
@@ -884,7 +885,7 @@
     /* ---------- INIT ---------- */
     loadLocal();
     renderInventory();
-    if (!API_URL || API_URL.includes("https://script.google.com/macros/s/AKfycbyh3u7WGpXluVKM9fcVGX2RI9myEIwNJtmyQItiYf9DzJ42ewlOmq6qNN6kfLWOWxOb/exec")) {
+    if (!API_URL) {
       updateStatus("Offline / Local Only");
     } else {
       updateStatus("Sheet linked (press Sync)", "ok");
