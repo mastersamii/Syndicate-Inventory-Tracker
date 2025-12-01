@@ -4,20 +4,20 @@
   <meta charset="UTF-8" />
   <title>Syndicate Stash Tracker</title>
 
-  <!-- Awesome fonts -->
+  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap" rel="stylesheet" />
 
   <style>
     :root {
-      --bg: #050509;
-      --bg-elevated: #0c0c14;
-      --accent: #10b981; /* teal/green syndicate vibes */
-      --accent-soft: rgba(16,185,129,0.18);
-      --accent-danger: #ef4444;
-      --text-main: #e5e7eb;
+      --bg: #020207;
+      --bg-elevated: #050509;
+      --accent: #ef4444; /* blood red */
+      --accent-soft: rgba(239,68,68,0.24);
+      --accent-danger: #f97373;
+      --text-main: #f9fafb;  /* almost white */
       --text-muted: #9ca3af;
-      --border-subtle: #1f2937;
-      --input-bg: #111827;
+      --border-subtle: #111827;
+      --input-bg: #020617;
     }
 
     * {
@@ -29,7 +29,7 @@
       min-height: 100vh;
       font-family: "Inter", system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--text-main);
-      background: radial-gradient(circle at top, #111827 0, #020617 50%, #000 100%);
+      background: radial-gradient(circle at top, #020617 0, #020007 50%, #000 100%);
       padding: 24px;
       display: flex;
       justify-content: center;
@@ -39,13 +39,13 @@
     .app-shell {
       width: 100%;
       max-width: 1100px;
-      background: linear-gradient(145deg, rgba(16,24,40,0.95), rgba(2,6,23,0.98));
+      background: radial-gradient(circle at top left, #050509 0, #020106 60%, #000 100%);
       border-radius: 18px;
       padding: 22px 24px 26px;
-      border: 1px solid rgba(148,163,184,0.3);
+      border: 1px solid rgba(249,250,251,0.08);
       box-shadow:
-        0 0 0 1px rgba(15,23,42,0.8),
-        0 24px 60px rgba(0,0,0,0.7);
+        0 0 0 1px rgba(15,23,42,0.9),
+        0 24px 80px rgba(0,0,0,0.9);
       position: relative;
       overflow: hidden;
     }
@@ -55,10 +55,10 @@
       position: absolute;
       inset: -40%;
       background:
-        radial-gradient(circle at 0% 0%, rgba(16,185,129,0.07), transparent 55%),
-        radial-gradient(circle at 100% 0%, rgba(59,130,246,0.07), transparent 55%);
+        radial-gradient(circle at 0% 0%, rgba(239,68,68,0.14), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(148,163,184,0.12), transparent 55%);
       mix-blend-mode: screen;
-      opacity: 0.9;
+      opacity: 0.95;
       pointer-events: none;
     }
 
@@ -87,11 +87,55 @@
       gap: 10px;
     }
 
+    .logo-mark {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 999px;
+      background: radial-gradient(circle at 30% 0, #111827 0, #020308 70%);
+      border: 1px solid rgba(249,250,251,0.18);
+      box-shadow:
+        0 0 0 1px rgba(15,23,42,0.9),
+        0 0 22px rgba(239,68,68,0.55);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .logo-skull {
+      font-size: 1.1rem;
+      transform: translateY(-1px);
+    }
+
+    /* inverted cross under the skull */
+    .logo-cross {
+      position: absolute;
+      width: 3px;
+      height: 18px;
+      background: linear-gradient(to bottom, rgba(239,68,68,0.85), transparent);
+      bottom: -2px;
+      left: 50%;
+      transform: translateX(-50%);
+      box-shadow: 0 0 10px rgba(239,68,68,0.9);
+    }
+
+    .logo-cross::before {
+      content: "";
+      position: absolute;
+      width: 10px;
+      height: 3px;
+      background: rgba(239,68,68,0.9);
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+    }
+
     .app-title-tag {
       font-size: 0.7rem;
       padding: 2px 8px;
       border-radius: 999px;
-      background: rgba(15,23,42,0.9);
+      background: rgba(0,0,0,0.85);
       border: 1px solid var(--accent-soft);
       color: var(--accent);
       text-transform: uppercase;
@@ -107,8 +151,8 @@
       font-size: 0.75rem;
       padding: 4px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(16,185,129,0.55);
-      background: rgba(15,118,110,0.24);
+      border: 1px solid rgba(239,68,68,0.7);
+      background: radial-gradient(circle at 0 0, rgba(127,29,29,0.9), rgba(15,23,42,0.9));
       color: var(--text-main);
       display: inline-flex;
       align-items: center;
@@ -119,8 +163,8 @@
       width: 7px;
       height: 7px;
       border-radius: 999px;
-      background: #22c55e;
-      box-shadow: 0 0 12px #22c55e;
+      background: #f97373;
+      box-shadow: 0 0 12px #f97373;
     }
 
     .controls-row {
@@ -140,7 +184,7 @@
       padding: 7px 10px;
       border-radius: 999px;
       border: 1px solid var(--border-subtle);
-      background: radial-gradient(circle at 0 0, rgba(15,23,42,0.9), #020617);
+      background: radial-gradient(circle at 0 0, #020617 0, #020007 70%);
     }
 
     .search-input input {
@@ -172,7 +216,7 @@
       padding: 7px 14px;
       border-radius: 999px;
       border: 1px solid var(--border-subtle);
-      background: radial-gradient(circle at 0 0, rgba(15,23,42,0.9), #020617);
+      background: radial-gradient(circle at 0 0, #020617 0, #020007 80%);
       color: var(--text-main);
       display: inline-flex;
       align-items: center;
@@ -183,17 +227,17 @@
 
     .pill-button:hover {
       border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(16,185,129,0.35), 0 0 16px rgba(16,185,129,0.18);
+      box-shadow: 0 0 0 1px rgba(239,68,68,0.45), 0 0 18px rgba(239,68,68,0.3);
       transform: translateY(-0.5px);
     }
 
     .pill-button.danger {
-      border-color: rgba(248,113,113,0.6);
+      border-color: rgba(248,113,113,0.7);
       color: #fecaca;
     }
 
     .pill-button.danger:hover {
-      box-shadow: 0 0 0 1px rgba(248,113,113,0.45), 0 0 16px rgba(248,113,113,0.18);
+      box-shadow: 0 0 0 1px rgba(248,113,113,0.55), 0 0 18px rgba(248,113,113,0.3);
     }
 
     .layout {
@@ -211,9 +255,9 @@
     }
 
     .card {
-      background: radial-gradient(circle at top, rgba(15,23,42,0.9), #020617);
+      background: radial-gradient(circle at top, #050509 0, #020106 70%);
       border-radius: 14px;
-      border: 1px solid rgba(51,65,85,0.85);
+      border: 1px solid rgba(31,41,55,0.9);
       padding: 12px 12px 14px;
       position: relative;
       overflow: hidden;
@@ -223,8 +267,8 @@
       content: "";
       position: absolute;
       inset: -40%;
-      background: radial-gradient(circle at 0 0, rgba(16,185,129,0.09), transparent 55%);
-      opacity: 0.35;
+      background: radial-gradient(circle at 0 0, rgba(239,68,68,0.14), transparent 55%);
+      opacity: 0.45;
       pointer-events: none;
     }
 
@@ -253,6 +297,7 @@
       height: 16px;
       border-radius: 999px;
       background: linear-gradient(to bottom, var(--accent), transparent);
+      box-shadow: 0 0 14px rgba(239,68,68,0.7);
     }
 
     .card-subtitle {
@@ -296,7 +341,7 @@
 
     form input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(16,185,129,0.35);
+      box-shadow: 0 0 0 1px rgba(239,68,68,0.45);
     }
 
     .form-row-span {
@@ -319,20 +364,20 @@
       font-size: 0.8rem;
       text-transform: uppercase;
       letter-spacing: 0.14em;
-      background: linear-gradient(to right, #22c55e, #0ea5e9);
-      color: #020617;
+      background: linear-gradient(to right, #f97373, #f97316);
+      color: #020106;
       cursor: pointer;
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 0 18px rgba(34,197,94,0.45);
+      box-shadow: 0 0 22px rgba(239,68,68,0.7);
       transition: all 0.16s ease-out;
     }
 
     .btn-primary:hover {
-      filter: brightness(1.08);
+      filter: brightness(1.06);
       transform: translateY(-0.5px);
-      box-shadow: 0 0 22px rgba(34,197,94,0.6);
+      box-shadow: 0 0 26px rgba(239,68,68,0.9);
     }
 
     .btn-secondary {
@@ -362,8 +407,8 @@
       overflow: auto;
       border-radius: 10px;
       border: 1px solid var(--border-subtle);
-      background: rgba(15,23,42,0.9);
-      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.9);
+      background: rgba(3,7,18,0.95);
+      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.96);
       z-index: 1;
     }
 
@@ -384,7 +429,7 @@
     td {
       padding: 6px 8px;
       text-align: left;
-      border-bottom: 1px solid rgba(31,41,55,0.8);
+      border-bottom: 1px solid rgba(31,41,55,0.9);
       white-space: nowrap;
     }
 
@@ -397,11 +442,11 @@
     }
 
     tbody tr:nth-child(even) {
-      background: rgba(15,23,42,0.6);
+      background: rgba(15,23,42,0.75);
     }
 
     tbody tr:hover {
-      background: rgba(16,185,129,0.08);
+      background: rgba(239,68,68,0.12);
     }
 
     tbody td.notes {
@@ -413,8 +458,8 @@
       font-size: 0.72rem;
       padding: 2px 7px;
       border-radius: 999px;
-      border: 1px solid rgba(55,65,81,0.9);
-      background: rgba(15,23,42,0.9);
+      border: 1px solid rgba(148,163,184,0.8);
+      background: rgba(15,23,42,0.98);
       color: var(--text-muted);
     }
 
@@ -442,7 +487,7 @@
     }
 
     .action-chip.danger {
-      border-color: rgba(248,113,113,0.7);
+      border-color: rgba(248,113,113,0.9);
       color: #fecaca;
     }
 
@@ -461,6 +506,10 @@
     <div class="app-header">
       <div class="app-title-block">
         <div class="app-title">
+          <div class="logo-mark">
+            <span class="logo-skull">☠</span>
+            <span class="logo-cross"></span>
+          </div>
           <span>Syndicate</span>
           <span class="app-title-tag">Stash Control</span>
         </div>
@@ -599,9 +648,9 @@
       const el = document.getElementById("sync-status");
       el.textContent = text;
       if (mode === "ok") {
-        el.parentElement.style.borderColor = "rgba(16,185,129,0.55)";
+        el.parentElement.style.borderColor = "rgba(239,68,68,0.8)";
       } else if (mode === "error") {
-        el.parentElement.style.borderColor = "rgba(248,113,113,0.7)";
+        el.parentElement.style.borderColor = "rgba(248,113,113,0.9)";
       } else {
         el.parentElement.style.borderColor = "rgba(148,163,184,0.4)";
       }
