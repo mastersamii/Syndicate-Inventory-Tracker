@@ -5,16 +5,19 @@
   <title>Syndicate Stash Tracker</title>
 
   <!-- Fonts -->
-  <link href="https://script.google.com/macros/s/AKfycbwqIJQsMb3Kr487uVr6nM7lFuRDZwLeqkc4_cy3KzSARzBxqnL75iGCa1VQL1y8ym3Q/exec" />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Inter:wght@400;600&display=swap"
+    rel="stylesheet"
+  />
 
   <style>
     :root {
       --bg: #020207;
       --bg-elevated: #050509;
       --accent: #ef4444; /* blood red */
-      --accent-soft: rgba(239,68,68,0.24);
+      --accent-soft: rgba(239, 68, 68, 0.24);
       --accent-danger: #f97373;
-      --text-main: #f9fafb;  /* almost white */
+      --text-main: #f9fafb; /* almost white */
       --text-muted: #9ca3af;
       --border-subtle: #111827;
       --input-bg: #020617;
@@ -42,10 +45,8 @@
       background: radial-gradient(circle at top left, #050509 0, #020106 60%, #000 100%);
       border-radius: 18px;
       padding: 22px 24px 26px;
-      border: 1px solid rgba(249,250,251,0.08);
-      box-shadow:
-        0 0 0 1px rgba(15,23,42,0.9),
-        0 24px 80px rgba(0,0,0,0.9);
+      border: 1px solid rgba(249, 250, 251, 0.08);
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9), 0 24px 80px rgba(0, 0, 0, 0.9);
       position: relative;
       overflow: hidden;
     }
@@ -54,9 +55,8 @@
       content: "";
       position: absolute;
       inset: -40%;
-      background:
-        radial-gradient(circle at 0% 0%, rgba(239,68,68,0.14), transparent 55%),
-        radial-gradient(circle at 100% 0%, rgba(148,163,184,0.12), transparent 55%);
+      background: radial-gradient(circle at 0% 0%, rgba(239, 68, 68, 0.14), transparent 55%),
+        radial-gradient(circle at 100% 0%, rgba(148, 163, 184, 0.12), transparent 55%);
       mix-blend-mode: screen;
       opacity: 0.95;
       pointer-events: none;
@@ -95,10 +95,8 @@
       height: 34px;
       border-radius: 999px;
       background: radial-gradient(circle at 30% 0, #111827 0, #020308 70%);
-      border: 1px solid rgba(249,250,251,0.18);
-      box-shadow:
-        0 0 0 1px rgba(15,23,42,0.9),
-        0 0 22px rgba(239,68,68,0.55);
+      border: 1px solid rgba(249, 250, 251, 0.18);
+      box-shadow: 0 0 0 1px rgba(15, 23, 42, 0.9), 0 0 22px rgba(239, 68, 68, 0.55);
       position: relative;
       overflow: hidden;
     }
@@ -113,11 +111,11 @@
       position: absolute;
       width: 3px;
       height: 18px;
-      background: linear-gradient(to bottom, rgba(239,68,68,0.85), transparent);
+      background: linear-gradient(to bottom, rgba(239, 68, 68, 0.85), transparent);
       bottom: -2px;
       left: 50%;
       transform: translateX(-50%);
-      box-shadow: 0 0 10px rgba(239,68,68,0.9);
+      box-shadow: 0 0 10px rgba(239, 68, 68, 0.9);
     }
 
     .logo-cross::before {
@@ -125,7 +123,7 @@
       position: absolute;
       width: 10px;
       height: 3px;
-      background: rgba(239,68,68,0.9);
+      background: rgba(239, 68, 68, 0.9);
       top: 5px;
       left: 50%;
       transform: translateX(-50%);
@@ -135,7 +133,7 @@
       font-size: 0.7rem;
       padding: 2px 8px;
       border-radius: 999px;
-      background: rgba(0,0,0,0.85);
+      background: rgba(0, 0, 0, 0.85);
       border: 1px solid var(--accent-soft);
       color: var(--accent);
       text-transform: uppercase;
@@ -151,8 +149,8 @@
       font-size: 0.75rem;
       padding: 4px 10px;
       border-radius: 999px;
-      border: 1px solid rgba(239,68,68,0.7);
-      background: radial-gradient(circle at 0 0, rgba(127,29,29,0.9), rgba(15,23,42,0.9));
+      border: 1px solid rgba(239, 68, 68, 0.7);
+      background: radial-gradient(circle at 0 0, rgba(127, 29, 29, 0.9), rgba(15, 23, 42, 0.9));
       color: var(--text-main);
       display: inline-flex;
       align-items: center;
@@ -227,17 +225,17 @@
 
     .pill-button:hover {
       border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(239,68,68,0.45), 0 0 18px rgba(239,68,68,0.3);
+      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.45), 0 0 18px rgba(239, 68, 68, 0.3);
       transform: translateY(-0.5px);
     }
 
     .pill-button.danger {
-      border-color: rgba(248,113,113,0.7);
+      border-color: rgba(248, 113, 113, 0.7);
       color: #fecaca;
     }
 
     .pill-button.danger:hover {
-      box-shadow: 0 0 0 1px rgba(248,113,113,0.55), 0 0 18px rgba(248,113,113,0.3);
+      box-shadow: 0 0 0 1px rgba(248, 113, 113, 0.55), 0 0 18px rgba(248, 113, 113, 0.3);
     }
 
     .layout {
@@ -257,7 +255,7 @@
     .card {
       background: radial-gradient(circle at top, #050509 0, #020106 70%);
       border-radius: 14px;
-      border: 1px solid rgba(31,41,55,0.9);
+      border: 1px solid rgba(31, 41, 55, 0.9);
       padding: 12px 12px 14px;
       position: relative;
       overflow: hidden;
@@ -267,7 +265,7 @@
       content: "";
       position: absolute;
       inset: -40%;
-      background: radial-gradient(circle at 0 0, rgba(239,68,68,0.14), transparent 55%);
+      background: radial-gradient(circle at 0 0, rgba(239, 68, 68, 0.14), transparent 55%);
       opacity: 0.45;
       pointer-events: none;
     }
@@ -297,7 +295,7 @@
       height: 16px;
       border-radius: 999px;
       background: linear-gradient(to bottom, var(--accent), transparent);
-      box-shadow: 0 0 14px rgba(239,68,68,0.7);
+      box-shadow: 0 0 14px rgba(239, 68, 68, 0.7);
     }
 
     .card-subtitle {
@@ -341,7 +339,7 @@
 
     form input:focus {
       border-color: var(--accent);
-      box-shadow: 0 0 0 1px rgba(239,68,68,0.45);
+      box-shadow: 0 0 0 1px rgba(239, 68, 68, 0.45);
     }
 
     .form-row-span {
@@ -370,14 +368,14 @@
       display: inline-flex;
       align-items: center;
       gap: 8px;
-      box-shadow: 0 0 22px rgba(239,68,68,0.7);
+      box-shadow: 0 0 22px rgba(239, 68, 68, 0.7);
       transition: all 0.16s ease-out;
     }
 
     .btn-primary:hover {
       filter: brightness(1.06);
       transform: translateY(-0.5px);
-      box-shadow: 0 0 26px rgba(239,68,68,0.9);
+      box-shadow: 0 0 26px rgba(239, 68, 68, 0.9);
     }
 
     .btn-secondary {
@@ -407,8 +405,8 @@
       overflow: auto;
       border-radius: 10px;
       border: 1px solid var(--border-subtle);
-      background: rgba(3,7,18,0.95);
-      box-shadow: inset 0 0 0 1px rgba(15,23,42,0.96);
+      background: rgba(3, 7, 18, 0.95);
+      box-shadow: inset 0 0 0 1px rgba(15, 23, 42, 0.96);
       z-index: 1;
     }
 
@@ -429,7 +427,7 @@
     td {
       padding: 6px 8px;
       text-align: left;
-      border-bottom: 1px solid rgba(31,41,55,0.9);
+      border-bottom: 1px solid rgba(31, 41, 55, 0.9);
       white-space: nowrap;
     }
 
@@ -442,11 +440,11 @@
     }
 
     tbody tr:nth-child(even) {
-      background: rgba(15,23,42,0.75);
+      background: rgba(15, 23, 42, 0.75);
     }
 
     tbody tr:hover {
-      background: rgba(239,68,68,0.12);
+      background: rgba(239, 68, 68, 0.12);
     }
 
     tbody td.notes {
@@ -458,8 +456,8 @@
       font-size: 0.72rem;
       padding: 2px 7px;
       border-radius: 999px;
-      border: 1px solid rgba(148,163,184,0.8);
-      background: rgba(15,23,42,0.98);
+      border: 1px solid rgba(148, 163, 184, 0.8);
+      background: rgba(15, 23, 42, 0.98);
       color: var(--text-muted);
     }
 
@@ -472,8 +470,8 @@
       font-size: 0.7rem;
       padding: 3px 8px;
       border-radius: 999px;
-      border: 1px solid rgba(55,65,81,0.9);
-      background: rgba(17,24,39,0.98);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+      background: rgba(17, 24, 39, 0.98);
       color: var(--text-muted);
       cursor: pointer;
       text-transform: uppercase;
@@ -487,7 +485,7 @@
     }
 
     .action-chip.danger {
-      border-color: rgba(248,113,113,0.9);
+      border-color: rgba(248, 113, 113, 0.9);
       color: #fecaca;
     }
 
@@ -529,13 +527,9 @@
         <input id="search" type="text" placeholder="Item, room, notes..." />
       </div>
 
-      <button class="pill-button" id="btn-sync">
-        ⟳ Sync Sheet
-      </button>
+      <button class="pill-button" id="btn-sync">⟳ Sync Sheet</button>
 
-      <button class="pill-button danger" id="btn-clear-all">
-        ✕ Wipe Local Cache
-      </button>
+      <button class="pill-button danger" id="btn-clear-all">✕ Wipe Local Cache</button>
     </div>
 
     <div class="layout">
@@ -585,9 +579,7 @@
             <button type="submit" class="btn-primary">
               <span id="submitLabel">Add Item</span>
             </button>
-            <button type="button" class="btn-secondary" id="btn-reset">
-              Reset Form
-            </button>
+            <button type="button" class="btn-secondary" id="btn-reset">Reset Form</button>
           </div>
         </form>
       </div>
@@ -633,14 +625,54 @@
 
   <script>
     /*******************************************
-     * CONFIG — SET THIS TO YOUR APPS SCRIPT URL
+     * CONFIG — YOUR APPS SCRIPT WEB APP URL
      *******************************************/
-    const API_URL = "https://script.google.com/macros/s/AKfycbwqIJQsMb3Kr487uVr6nM7lFuRDZwLeqkc4_cy3KzSARzBxqnL75iGCa1VQL1y8ym3Q/exec";
+    const API_URL =
+      "https://script.google.com/macros/s/AKfycbw-OzSrTXWKzS7d3yY-COw7sQrKxIvUzucDnVccRc5cPNJbXioTw-wmLXg3TggfInDy/exec";
+
     const LOCAL_STORAGE_KEY = "syndicateInventory_v1";
 
     let inventory = [];
     let editingId = null;
     let lastSync = null;
+
+    /* ---------- API HELPER (Pizza-style, no CORS preflight) ---------- */
+
+    async function stashApi(method, body) {
+      const url = API_URL + "?m=" + encodeURIComponent(method);
+
+      // list → GET
+      if (method === "list") {
+        const res = await fetch(url, { method: "GET" });
+        const txt = await res.text();
+        let data = {};
+        try {
+          data = JSON.parse(txt);
+        } catch (e) {}
+        if (!res.ok || (data && data.ok === false)) {
+          const msg = data && data.error ? data.error : `HTTP ${res.status} ${res.statusText}`;
+          throw new Error(msg);
+        }
+        return data;
+      }
+
+      // save/delete → POST with no custom headers
+      const res = await fetch(url, {
+        method: "POST",
+        body: JSON.stringify(body || {}),
+      });
+
+      const txt = await res.text();
+      let data = {};
+      try {
+        data = JSON.parse(txt);
+      } catch (e) {}
+      if (!res.ok || (data && data.ok === false)) {
+        const msg = data && data.error ? data.error : `HTTP ${res.status} ${res.statusText}`;
+        throw new Error(msg);
+      }
+      return data;
+    }
 
     /* ---------- UTILITIES ---------- */
 
@@ -648,11 +680,11 @@
       const el = document.getElementById("sync-status");
       el.textContent = text;
       if (mode === "ok") {
-        el.parentElement.style.borderColor = "rgba(239,68,68,0.8)";
+        el.parentElement.style.borderColor = "rgba(239, 68, 68, 0.8)";
       } else if (mode === "error") {
-        el.parentElement.style.borderColor = "rgba(248,113,113,0.9)";
+        el.parentElement.style.borderColor = "rgba(248, 113, 113, 0.9)";
       } else {
-        el.parentElement.style.borderColor = "rgba(148,163,184,0.4)";
+        el.parentElement.style.borderColor = "rgba(148, 163, 184, 0.4)";
       }
     }
 
@@ -680,7 +712,7 @@
       let visible = 0;
 
       inventory
-        .map((item, index) => ({ ...item, index })) // keep original index
+        .map((item, index) => ({ ...item, index }))
         .filter((row) => {
           if (!search) return true;
           return (
@@ -711,11 +743,13 @@
           tbody.appendChild(tr);
         });
 
-      document.getElementById("countDisplay").textContent =
-        `${visible} item${visible === 1 ? "" : "s"} visible (total ${inventory.length})`;
+      document.getElementById("countDisplay").textContent = `${visible} item${
+        visible === 1 ? "" : "s"
+      } visible (total ${inventory.length})`;
 
-      document.getElementById("lastSyncDisplay").textContent =
-        lastSync ? `Last sync: ${new Date(lastSync).toLocaleString()}` : "Last sync: never";
+      document.getElementById("lastSyncDisplay").textContent = lastSync
+        ? `Last sync: ${new Date(lastSync).toLocaleString()}`
+        : "Last sync: never";
     }
 
     function resetForm() {
@@ -740,62 +774,48 @@
       document.getElementById("submitLabel").textContent = "Update Item";
     }
 
-    /* ---------- API HELPERS (Google Apps Script) ---------- */
-    async function apiRequest(payload) {
-      // only check if it's empty now
-      if (!API_URL) {
-        console.warn("API_URL not configured. Running local-only.");
-        return null;
-      }
-
-      try {
-        const res = await fetch(API_URL, {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(payload),
-        });
-
-        if (!res.ok) {
-          throw new Error(`HTTP ${res.status}`);
-        }
-        const data = await res.json();
-        return data;
-      } catch (err) {
-        console.error("API error:", err);
-        updateStatus("Sync error (check console)", "error");
-        return null;
-      }
-    }
+    /* ---------- API WRAPPERS ---------- */
 
     async function syncFromSheet() {
-      const data = await apiRequest({ action: "list" });
-      if (!data || !data.items) return;
-
-      inventory = data.items;
-      lastSync = Date.now();
-      saveLocal();
-      renderInventory(document.getElementById("search").value);
-      updateStatus("Synced with sheet", "ok");
+      try {
+        const data = await stashApi("list");
+        inventory = data.items || [];
+        lastSync = Date.now();
+        saveLocal();
+        renderInventory(document.getElementById("search").value);
+        updateStatus("Synced with sheet", "ok");
+      } catch (err) {
+        console.error("Sync error:", err);
+        updateStatus("Sync error (check console)", "error");
+      }
     }
 
     async function saveItemToSheet(item) {
-      const data = await apiRequest({ action: "save", item });
-      if (!data || !data.items) return;
-      inventory = data.items;
-      lastSync = Date.now();
-      saveLocal();
-      renderInventory(document.getElementById("search").value);
-      updateStatus("Saved to sheet", "ok");
+      try {
+        const data = await stashApi("save", { item });
+        inventory = data.items || [];
+        lastSync = Date.now();
+        saveLocal();
+        renderInventory(document.getElementById("search").value);
+        updateStatus("Saved to sheet", "ok");
+      } catch (err) {
+        console.error("Save error:", err);
+        updateStatus("Save error (check console)", "error");
+      }
     }
 
     async function deleteItemFromSheet(id) {
-      const data = await apiRequest({ action: "delete", id });
-      if (!data || !data.items) return;
-      inventory = data.items;
-      lastSync = Date.now();
-      saveLocal();
-      renderInventory(document.getElementById("search").value);
-      updateStatus("Deleted from sheet", "ok");
+      try {
+        const data = await stashApi("delete", { id });
+        inventory = data.items || [];
+        lastSync = Date.now();
+        saveLocal();
+        renderInventory(document.getElementById("search").value);
+        updateStatus("Deleted from sheet", "ok");
+      } catch (err) {
+        console.error("Delete error:", err);
+        updateStatus("Delete error (check console)", "error");
+      }
     }
 
     /* ---------- EVENT HANDLERS ---------- */
@@ -811,8 +831,8 @@
 
       if (!name) return;
 
-      let item = {
-        id: idField || crypto.randomUUID(),
+      const item = {
+        id: idField || (crypto.randomUUID ? crypto.randomUUID() : String(Date.now())),
         name,
         room,
         qty,
@@ -820,7 +840,6 @@
         notes,
       };
 
-      // update local array
       const existingIndex = inventory.findIndex((i) => i.id === item.id);
       if (existingIndex >= 0) {
         inventory[existingIndex] = item;
@@ -831,7 +850,6 @@
       saveLocal();
       renderInventory(document.getElementById("search").value);
 
-      // push to sheet
       await saveItemToSheet(item);
 
       resetForm();
@@ -851,12 +869,10 @@
       } else if (action === "delete") {
         if (!confirm("Delete this stash entry from sheet and local?")) return;
 
-        // local remove
         inventory = inventory.filter((i) => i.id !== id);
         saveLocal();
         renderInventory(document.getElementById("search").value);
 
-        // sheet remove
         await deleteItemFromSheet(id);
       }
     });
@@ -885,11 +901,7 @@
     /* ---------- INIT ---------- */
     loadLocal();
     renderInventory();
-    if (!API_URL) {
-      updateStatus("Offline / Local Only");
-    } else {
-      updateStatus("Sheet linked (press Sync)", "ok");
-    }
+    updateStatus("Sheet linked (press Sync)", "ok");
   </script>
 </body>
 </html>
